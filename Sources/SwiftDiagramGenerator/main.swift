@@ -31,7 +31,6 @@ try! diagramScriptTemplateFileContents.write(
     atomically: false,
     encoding: .utf8)
 
-executeShellCommand(arguments:
-    "open", visualizationDirectoryPath + "diagram.html")
+executeShellCommand(arguments: "open", visualizationDirectoryPath + "diagram.html")
 
 print(resultJsonString)
