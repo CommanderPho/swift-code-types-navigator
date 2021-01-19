@@ -41,7 +41,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		return URL(fileURLWithPath: "/Volumes/Speakhard/Repo/swift-code-types-navigator/Visualization", isDirectory: true)
 	}
 
-	fileprivate func run(filePathStrings: [String]) {
+
+	
+	public func run(filePathStrings: [String]) {
 		print("AppDelegate.run(filePathStrings: \(filePathStrings))...")
 		let fileSystemItemsPaths = filePathStrings
 		let swiftFilePaths = FileSystemHelper.getSwiftFilePaths(inFileSystemItemPaths: fileSystemItemsPaths)
