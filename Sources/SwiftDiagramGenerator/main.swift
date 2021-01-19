@@ -8,6 +8,10 @@
 import SwiftDiagramComponentsGenerator
 
 let arguments = CommandLine.arguments
+let numArgs = arguments.count
+if (numArgs < 3) {
+	fatalError("./SwiftDiagramGenerator outputDir inputDirs ...")
+}
 let visualizationDirectoryPath = arguments[1] + "/Visualization/"
 let fileSystemItemsPaths = Array(arguments[2...])
 let swiftFilePaths = FileSystemHelper.getSwiftFilePaths(
