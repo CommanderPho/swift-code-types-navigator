@@ -14,7 +14,7 @@ if (numArgs < 3) {
 }
 let visualizationDirectoryPath = arguments[1] + "/Visualization/"
 let fileSystemItemsPaths = Array(arguments[2...])
-let swiftFilePaths = FileSystemHelper.getSwiftFilePaths(
+let swiftFilePaths = FileSystemHelper.getFlattenedSwiftFilePathStrings(
     inFileSystemItemPaths: fileSystemItemsPaths)
 
 let result = Generator.generateSwiftDiagramComponents(
@@ -31,7 +31,6 @@ try! diagramScriptTemplateFileContents.write(
     atomically: false,
     encoding: .utf8)
 
-executeShellCommand(arguments:
-    "open", visualizationDirectoryPath + "diagram.html")
+executeShellCommand(arguments: "open", visualizationDirectoryPath + "diagram.html")
 
 print(resultJsonString)

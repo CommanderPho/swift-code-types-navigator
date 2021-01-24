@@ -5,14 +5,21 @@
 //  Created by Jovan Jovanovski on 12/20/17.
 //
 
+import Foundation
 import Parser
 import Source
 import AST
 
 public struct Generator {
-    
-    public static func generateSwiftDiagramComponents(
-        forSwiftFilesAtPaths filePaths: [String]) -> Result {
+
+
+	// Convenience [URL] version
+	public static func generateSwiftDiagramComponents(forSwiftFilesAtPathURLs filePaths: [URL]) -> Result {
+		return Self.generateSwiftDiagramComponents(forSwiftFilesAtPaths: filePaths.map({ $0.path }))
+	}
+
+
+    public static func generateSwiftDiagramComponents(forSwiftFilesAtPaths filePaths: [String]) -> Result {
         let convertiblesToRelationships = filePaths.flatMap {
             filePath -> [ConvertibleToRelationship] in
             let sourceFile = try! SourceReader.read(at: filePath)
