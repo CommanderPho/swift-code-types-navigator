@@ -28,7 +28,6 @@ public typealias GenerateResultTupleType = (outputJavascriptPath: URL, outputHtm
 
 public struct CodeDiagramGenerator: CodeDiagramGeneratingProtocol {
 
-
 	public var lastActiveFilePaths: [URL]? = nil
 	public var results: [[URL]:GenerateResultTupleType] = [:]
 
