@@ -9,15 +9,6 @@ import Foundation
 import Cocoa
 
 
-
-class wcCodeDependenciesSearch: NSWindowController {
-
-	// Hold a strong reference to the dependency analysis manager object so it isn't dereferenced
-	@IBOutlet var codeDepMan: DependencyAnalysisManager!
-
-}
-
-
 class vcCodeDependenciesSearch: NSViewController {
 
     @IBOutlet weak var mainTable: NSTableView!
