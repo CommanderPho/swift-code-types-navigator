@@ -8,9 +8,9 @@
 import Foundation
 
 struct FileSystemHelper {
-    
-    static func getSwiftFilePaths(
-        inFileSystemItemPaths fileSystemItemPaths: [String]) -> [String] {
+
+	// Recurrsively enumerates the flattened directory structure:
+    fileprivate static func getFlattenedSwiftFilePathStrings(inFileSystemItemPaths fileSystemItemPaths: [String]) -> [String] {
         if fileSystemItemPaths.isEmpty {
             return fileSystemItemPaths
         }
@@ -22,10 +22,14 @@ struct FileSystemHelper {
                     atPath: fileSystemItemPath).filter { $0.isSwiftFile }
                     .map { fileSystemItemPath + "/" + $0 }
             }
-            
+			// Otherwise, if it's not a directory, just return the file if it's a .swift file:
             return fileSystemItemPath.isSwiftFile ? [fileSystemItemPath] : []
         }
     }
+
+	public static func getFlattenedSwiftFilePaths(inFileSystemItemPaths fileSystemItemPaths: [URL]) -> [URL] {
+		return Self.getFlattenedSwiftFilePathStrings(inFileSystemItemPaths: fileSystemItemPaths.map({ $0.path })).map({ URL(fileURLWithPath: $0) })
+	}
     
 }
 

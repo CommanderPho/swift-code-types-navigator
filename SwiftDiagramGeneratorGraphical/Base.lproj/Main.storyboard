@@ -675,8 +675,31 @@
                         <outlet property="delegate" destination="Voe-Tx-rLC" id="PrD-fu-P6m"/>
                     </connections>
                 </application>
-                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="SwiftDiagramGeneratorGraphical" customModuleProvider="target"/>
+                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="SwiftDiagramGeneratorGraphical" customModuleProvider="target">
+                    <connections>
+                        <outlet property="menuBarExtraMainMenu" destination="pH1-oC-SUf" id="cck-hw-Al3"/>
+                        <outlet property="menuBarExtra_MenuItem_Rebuild" destination="XKu-AI-oYO" id="Cez-2l-Ipc"/>
+                        <outlet property="menuBarExtra_MenuItem_SelectNewTarget" destination="iMz-Nk-wSZ" id="rHY-pJ-qTp"/>
+                    </connections>
+                </customObject>
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
+                <menu title="Main AppMenuExtra Menu" id="pH1-oC-SUf" userLabel="Main AppMenuExtra Menu">
+                    <items>
+                        <menuItem title="Rebuild..." id="XKu-AI-oYO">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                            <connections>
+                                <action selector="actionPerformRebuild:" target="Voe-Tx-rLC" id="oHq-Xc-cSn"/>
+                            </connections>
+                        </menuItem>
+                        <menuItem title="Select New Target..." id="iMz-Nk-wSZ">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                            <connections>
+                                <action selector="actionPerformChangeTarget:" target="Voe-Tx-rLC" id="cVY-tT-yJm"/>
+                            </connections>
+                        </menuItem>
+                        <menuItem title="Quit" keyEquivalent="q" id="aXf-Ky-Nbn"/>
+                    </items>
+                </menu>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="75" y="0.0"/>
@@ -685,8 +708,8 @@
         <scene sceneID="R2V-B0-nI4">
             <objects>
                 <windowController id="B8D-0N-5wS" sceneMemberID="viewController">
-                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
-                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+                    <window key="window" title="Swift Diagram Generator (GUI)" subtitle="Test" separatorStyle="line" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="196" y="240" width="480" height="270"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>

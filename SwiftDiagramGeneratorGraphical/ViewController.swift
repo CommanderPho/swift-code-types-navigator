@@ -36,7 +36,7 @@ extension ViewController: DragViewDelegate {
 			fatalError()
 		}
 		// tell the AppDelegate to run, which will generate the file
-		validAppDelegate.run(filePathStrings: fileURLs.flatMap({$0.path}))
+		validAppDelegate.performTryRun(filePaths: fileURLs)
 	}
 
 	

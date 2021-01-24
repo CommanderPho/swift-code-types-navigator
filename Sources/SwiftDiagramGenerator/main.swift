@@ -14,7 +14,7 @@ if (numArgs < 3) {
 }
 let visualizationDirectoryPath = arguments[1] + "/Visualization/"
 let fileSystemItemsPaths = Array(arguments[2...])
-let swiftFilePaths = FileSystemHelper.getSwiftFilePaths(
+let swiftFilePaths = FileSystemHelper.getFlattenedSwiftFilePathStrings(
     inFileSystemItemPaths: fileSystemItemsPaths)
 
 let result = Generator.generateSwiftDiagramComponents(

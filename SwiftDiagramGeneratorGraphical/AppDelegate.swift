@@ -6,7 +6,7 @@
 //
 
 import Cocoa
-import SwiftDiagramComponentsGenerator
+
 
 
 @main
@@ -21,7 +21,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, MacOSMenuBarExtraProviderPro
 	}
 
 
-	
+	var diagramGenerator: CodeDiagramGenerator = CodeDiagramGenerator()
+
+
 	////////////////////////////////////////////////////////////////////
 	//MARK: -
 	//MARK: - MacOSMenuBarExtraProviderProtocol properties
@@ -29,6 +31,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, MacOSMenuBarExtraProviderPro
 	// The Menu that contains the menuBar Item, displayed in the right side of the macOS MenuBar. (Not the app menu)
 	@IBOutlet weak var menuBarExtraMainMenu: NSMenu!
 
+	@IBOutlet weak var menuBarExtra_MenuItem_Rebuild: NSMenuItem!
+	@IBOutlet weak var menuBarExtra_MenuItem_SelectNewTarget: NSMenuItem!
 
 
 //	var visualizationDirectoryPathString: URL = URL(fileURLWithPath: "/Volumes/Speakhard/Repo/swift-code-types-navigator", isDirectory: true)
@@ -36,7 +40,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, MacOSMenuBarExtraProviderPro
 	var results: [[String]:URL] = [:]
 	
 	func application(_ sender: NSApplication, openFile filename: String) -> Bool {
-		self.run(filePathStrings: [filename])
+		self.performTryRun(filePathStrings: [filename])
 		return true
 	}
 
@@ -52,57 +56,41 @@ class AppDelegate: NSObject, NSApplicationDelegate, MacOSMenuBarExtraProviderPro
 	}
 
 
-	func getVisualizationPath() -> URL {
-		// Bundle mode:
-//		guard let validRootPath = Bundle.init(for: AppDelegate.self).url(forResource: "Visualization", withExtension: nil, subdirectory: nil) else {
-//			fatalError()
-//		}
-//		return validRootPath
 
-		// Hardcoded mode:
-		return URL(fileURLWithPath: "/Volumes/Speakhard/Repo/swift-code-types-navigator/Visualization", isDirectory: true)
+	// [String] convenience version
+	public func performTryRun(filePathStrings: [String]) {
+//		self.diagramGenerator.run(filePathStrings: filePathStrings)
+		self.performTryRun(filePaths: filePathStrings.map({ URL(fileURLWithPath: $0) }))
+	}
+
+	public func performTryRun(filePaths: [URL]) {
+		self.diagramGenerator.run(filePaths: filePaths)
 	}
 
 
-	
-	public func run(filePathStrings: [String]) {
-		print("AppDelegate.run(filePathStrings: \(filePathStrings))...")
-		let fileSystemItemsPaths = filePathStrings
-		let swiftFilePaths = FileSystemHelper.getSwiftFilePaths(inFileSystemItemPaths: fileSystemItemsPaths)
-		let result = Generator.generateSwiftDiagramComponents(forSwiftFilesAtPaths: swiftFilePaths)
-		let resultJsonString = jsonString(fromObject: result)
 
-		let validRootPath = getVisualizationPath()
+	@IBAction func actionPerformRebuild(_ sender: Any) {
+//		self.performTryRun(filePaths: self.diagramGenerator.)
 
-		var diagramScriptTemplateFileContents = try! String(contentsOfFile:	validRootPath.appendingPathComponent("diagramScriptTemplate").path)
-		diagramScriptTemplateFileContents =
-			diagramScriptTemplateFileContents.replacingOccurrences(of: "$entitiesAndRelationships", with: resultJsonString)
-
-
-		let outputPath = validRootPath.appendingPathComponent("diagram.js")
-		try! diagramScriptTemplateFileContents.write(toFile: outputPath.path, atomically: false, encoding: .utf8)
-
-
-		let outputHtmlPath = validRootPath.appendingPathComponent("diagram.html")
-		// add the results to the output results list
-		self.results[filePathStrings] = outputHtmlPath
-
-		//DO:
-		print("done: result written to outputHtmlPath: \(outputHtmlPath.path)")
-		executeShellCommand(arguments: "open", outputHtmlPath.path)
-//		print(resultJsonString)
 	}
+
+	@IBAction func actionPerformChangeTarget(_ sender: Any) {
+		//TODO: Show a file selector
+
+	}
+
 
 }
 
 
 
-extension AppDelegate {
+extension AppDelegate: NSWindowDelegate {
 
 	////////////////////////////////////////////////////////////////////
 	//MARK: -
 	//MARK: - MacOSMenuBarExtraProviderProtocol: macOS MenuBar Status Item (the agent in the right side of the menubar)
 
+	public var acceptedDraggedFileExtensions: [String] { return ["swift", ""];}  // allow .swift files and folders
 
 	func updateMenuBarExtra() {
 		let menuBarExtra: NSStatusItem
@@ -128,14 +116,98 @@ extension AppDelegate {
 		// -1 to indicate "variable length"
 		self.menuBarExtraStatusItem = NSStatusBar.system.statusItem(withLength: -1)
 
+		// register with an array of types you'd like to accept
+		guard let validButton = self.menuBarExtraStatusItem.button,
+			  let validWindow = validButton.window else {
+			fatalError()
+		}
+		validWindow.registerForDraggedTypes([.fileURL])
+		validWindow.delegate = self
+
+
+//		self.menuBarExtraStatusItem.button = NSStatusBarButton(title: self.applicationStatus.menuBarStatus.title, image: self.applicationStatus.menuBarStatus.image, target: self, action: nil)
+
+
 		// Set the menu that should appear when the item is clicked
 		self.menuBarExtraStatusItem!.menu = self.menuBarExtraMainMenu
 
 		// Set if the item should change color when clicked
-		self.menuBarExtraStatusItem!.highlightMode = true
+//		self.menuBarExtraStatusItem!.highlightMode = true
+//		self.menuBarExtraStatusItem!.button!.cell!.highlight(<#T##flag: Bool##Bool#>, withFrame: <#T##NSRect#>, in: <#T##NSView#>)
 	}
 
 
 
+
+
+}
+
+
+extension AppDelegate: NSDraggingDestination {
+
+//	public func color(to color: NSColor)
+//	{
+//		guard let validButton = self.menuBarExtraStatusItem.button else {
+//			fatalError()
+//		}
+//		validButton.wantsLayer = true
+//		validButton.layer?.backgroundColor = color.cgColor
+//	}
+//
+//
+//	////////////////////////////////////////////////////////////////////
+//	//MARK: -
+//	//MARK: - NSWindowDelegate functions for Drag/Dropping to custom Status Item (macOS MenuBarExtra)
+//	public func draggingEntered(_ draggingInfo: NSDraggingInfo) -> NSDragOperation {
+//		var containsMatchingFiles = false
+//		draggingInfo.draggingPasteboard.readObjects(forClasses: [NSURL.self], options: nil)?.forEach
+//		{
+//			eachObject in
+//			if let eachURL = eachObject as? URL
+//			{
+//				containsMatchingFiles = containsMatchingFiles || acceptedDraggedFileExtensions.contains(eachURL.pathExtension.lowercased())
+//				if containsMatchingFiles { print(eachURL.path) }
+//			}
+//		}
+//
+//		switch (containsMatchingFiles)
+//		{
+//			case true:
+//				color(to: .secondaryLabelColor)
+//				return .copy
+//			case false:
+//				color(to: .disabledControlTextColor)
+//				return .init()
+//		}
+//	}
+//
+//	public func performDragOperation(_ draggingInfo: NSDraggingInfo) -> Bool {
+//		// Collect URLs.
+//		var matchingFileURLs: [URL] = []
+//		draggingInfo.draggingPasteboard.readObjects(forClasses: [NSURL.self], options: nil)?.forEach
+//		{
+//			eachObject in
+//			if
+//				let eachURL = eachObject as? URL,
+//				acceptedDraggedFileExtensions.contains(eachURL.pathExtension.lowercased())
+//			{ matchingFileURLs.append(eachURL) }
+//		}
+//
+//		// Only if any,
+//		guard matchingFileURLs.count > 0
+//		else { return false }
+//
+//		// Perform the run!
+//		self.performTryRun(filePaths: matchingFileURLs)
+//		return true
+//	}
+//
+//	public func draggingExited(_ sender: NSDraggingInfo?) {
+//		color(to: .clear)
+//	}
+//
+//	public func draggingEnded(_ sender: NSDraggingInfo) {
+//		color(to: .clear)
+//	}
 
 }
