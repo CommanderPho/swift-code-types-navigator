@@ -9,6 +9,13 @@ import Foundation
 import Cocoa
 
 
+class vcCodeDependenciesResult: NSViewController {
+
+	@IBOutlet var txtResult: NSTextView!
+
+
+}
+
 class vcCodeDependenciesSearch: NSViewController {
 
     @IBOutlet weak var mainTable: NSTableView!

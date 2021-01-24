@@ -88,10 +88,10 @@
             </objects>
             <point key="canvasLocation" x="-40" y="216"/>
         </scene>
-        <!--View Controller-->
+        <!--Vc Code Dependencies Search-->
         <scene sceneID="Udv-i5-5fj">
             <objects>
-                <viewController id="NZS-vR-5j9" sceneMemberID="viewController">
+                <viewController id="NZS-vR-5j9" customClass="vcCodeDependenciesSearch" customModule="SwiftDiagramGeneratorGraphical" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="TA9-CJ-be3">
                         <rect key="frame" x="0.0" y="0.0" width="149" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -198,6 +198,9 @@
                             <constraint firstAttribute="bottom" secondItem="Ccx-tf-dUl" secondAttribute="bottom" constant="14" id="wLy-Ms-PIk"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="mainTable" destination="zWq-Ym-GXu" id="4Ex-FE-CUR"/>
+                    </connections>
                 </viewController>
                 <customObject id="hQS-sW-32Q" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -206,7 +209,7 @@
         <!--TextView-->
         <scene sceneID="kyg-o3-J7c">
             <objects>
-                <viewController title="TextView" id="3gI-af-3ue" sceneMemberID="viewController">
+                <viewController title="TextView" id="3gI-af-3ue" customClass="vcCodeDependenciesResult" customModule="SwiftDiagramGeneratorGraphical" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="KQ0-VQ-kgr">
                         <rect key="frame" x="0.0" y="0.0" width="302" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -267,6 +270,9 @@
                             <constraint firstAttribute="trailing" secondItem="yU6-YV-02c" secondAttribute="trailing" id="yhh-vC-85M"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="txtResult" destination="8dP-h4-gig" id="uhq-Ea-2qc"/>
+                    </connections>
                 </viewController>
                 <customObject id="IeN-sh-8Uk" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="MdF-Xl-ukK">
@@ -279,7 +285,7 @@
                     </textFieldCell>
                 </textField>
             </objects>
-            <point key="canvasLocation" x="872" y="406"/>
+            <point key="canvasLocation" x="838" y="552"/>
         </scene>
     </scenes>
 </document>
