@@ -41,5 +41,20 @@ public struct Generator {
                 convertiblesToRelationships: convertiblesToRelationships),
             containerEntityId: -1)
     }
+
+
+
+	public static func generateSwiftDiagramComponents(forSwiftFileAtPathURL filePath: URL) -> Result {
+		return Self.generateSwiftDiagramComponents(forSwiftFilesAtPathURLs: [filePath])
+	}
+
+
+	public static func generateSwiftDiagramComponents(forSwiftFileAtPath filePath: String) -> Result {
+		return Self.generateSwiftDiagramComponents(forSwiftFilesAtPaths: [filePath])
+	}
+
+
+
+
     
 }
