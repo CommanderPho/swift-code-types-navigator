@@ -13,7 +13,6 @@ import SwiftGraph
 
 open class DependencyAnalysisManager: NSObject, AnalyzeImplementorProtocol {
 
-
 	@IBOutlet weak var txtSymbolSearchField: NSSearchField!
 
 	@objc dynamic var resultText: String = ""
@@ -24,6 +23,28 @@ open class DependencyAnalysisManager: NSObject, AnalyzeImplementorProtocol {
 
 	@objc dynamic var isAnalyzerReady: Bool = false
 
+
+	var symbolsSearchList: [String] = []
+	typealias AnalysisResultTuple = (dependencies: [String], stringRepresentation: String)
+	var resultsList: [String:AnalysisResultTuple?] = [:]
+
+	@objc dynamic func getNumOfResults() -> Int {
+		return self.symbolsSearchList.count
+	}
+
+	@objc dynamic func getAnalyzedSymbolsList() -> [String] {
+		return self.symbolsSearchList
+	}
+
+
+	// Delegates
+	public var textUpdateDelegate: ResultsUpdatedTextDelegate? = nil
+	public var tableUpdateDelegate: ResultsTableDelegate? = nil
+
+
+	////////////////////////////////////////////////////////////////////
+	//MARK: -
+	//MARK: - View Lifecycle functions
 
 	open override func awakeFromNib() {
 		super.awakeFromNib()
@@ -72,18 +93,24 @@ open class DependencyAnalysisManager: NSObject, AnalyzeImplementorProtocol {
 			self.isAnalyzerReady = false
 		}
 		print("performing search: \(symbolText)!!!")
+		self.symbolsSearchList.append(symbolText)
+		self.tableUpdateDelegate?.needsUpdate()
+
 		let representedString: String
 
 		do {
-			let foundDependencies = try self.analyzer.findDependencies(className: symbolText, upToOrder: 2)
+			let foundDependencies = try self.analyzer.findDependencies(className: symbolText, upToOrder: 2) // [String]
 			representedString = foundDependencies.joined(separator: ", ")
+			self.resultsList[symbolText] = (foundDependencies, representedString)
 
 		} catch let error {
 			print("error performing analysis for symbolText: \(symbolText). Error: \(error.localizedDescription)")
 			representedString = "\(error.localizedDescription)"
+			self.resultsList[symbolText] = nil
 		}
 		print("done! result: \(representedString)")
 		self.resultText = representedString
+		self.textUpdateDelegate?.updateText(string: representedString)
 		self.isAnalyzerReady = true // indicate that we're ready again
 	}
 
