@@ -5,6 +5,7 @@
 //  Created by Jovan Jovanovski on 12/25/17.
 //
 
+import Foundation
 import SwiftDiagramComponentsGenerator
 
 let arguments = CommandLine.arguments
@@ -14,11 +15,10 @@ if (numArgs < 3) {
 }
 let visualizationDirectoryPath = arguments[1] + "/Visualization/"
 let fileSystemItemsPaths = Array(arguments[2...])
-let swiftFilePaths = FileSystemHelper.getFlattenedSwiftFilePathStrings(
-    inFileSystemItemPaths: fileSystemItemsPaths)
+let fileSystemItemsUrlPaths = fileSystemItemsPaths.map({ URL(fileURLWithPath: $0) })
+let swiftFilePaths = FileSystemHelper.getFlattenedSwiftFilePaths(inFileSystemItemPaths: fileSystemItemsUrlPaths)
 
-let result = Generator.generateSwiftDiagramComponents(
-    forSwiftFilesAtPaths: swiftFilePaths)
+let result = Generator.generateSwiftDiagramComponents(forSwiftFilesAtPaths: swiftFilePaths.map({ $0.path }))
 let resultJsonString = jsonString(fromObject: result)
 
 var diagramScriptTemplateFileContents = try! String(contentsOfFile:
